@@ -14,9 +14,15 @@ const Location = require("./Models/Location");
 const app = express();
 app.use(formidable());
 
-app.get("/", (req, res) => {
-    console.log(req.query);
-    res.json({message: "Hello world"});
+app.get("/", async (req, res) => {
+    try {
+        const response = await Location.find();
+        console.log(response);
+        res.status(200).json(response)
+    }
+    catch(error) {
+        res.status(400).json({error: error.message})
+    }
 });
 
 app.post("/add-location", async (req, res) => {
@@ -68,5 +74,5 @@ app.post("/add-location", async (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server has started on port ${process.env.PORT}...`)
+    console.log(`Server has started on port ${process.env.PORT || 3000}...`)
 })
