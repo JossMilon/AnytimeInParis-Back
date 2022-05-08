@@ -22,21 +22,24 @@ app.get("/", (req, res) => {
 app.post("/add-location", async (req, res) => {
     try {
         const name = req.fields.name;
+        const description = req.fields.description;
+        const latitude = req.fields.latitude;
+        const longitude = req.fields.longitude;
+        const monday = req.fields.monday;
+        const tuesday = req.fields.tuesday;
+        const wednesday = req.fields.wednesday;
+        const thursday = req.fields.thursday;
+        const friday = req.fields.friday;
+        const satursday = req.fields.satursday;
+        const sunday = req.fields.sunday;
         const alreadyExist = await Location.find({ "properties.name": name });
-        if (alreadyExist.length !== 0) {
+        if (name === undefined || latitude === undefined || longitude === undefined) {
+            res.status(400).json({ message: `Il manque des informations pour ajouter ce lieu.`})
+        }
+        else if (alreadyExist.length !== 0) {
             res.status(400).json({message: `Le lieu ${name} a déjà été ajouté 🙃.`});
         }
         else {
-            const description = req.fields.description;
-            const latitude = req.fields.latitude;
-            const longitude = req.fields.longitude;
-            const monday = req.fields.monday;
-            const tuesday = req.fields.tuesday;
-            const wednesday = req.fields.wednesday;
-            const thursday = req.fields.thursday;
-            const friday = req.fields.friday;
-            const satursday = req.fields.satursday;
-            const sunday = req.fields.sunday;
             const newLocation = new Location({
                 properties: {
                     name: name,
