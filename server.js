@@ -3,6 +3,7 @@ const express = require("express");
 const formidable = require("express-formidable");
 const axios = require("axios");
 const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 
 //DB setup
@@ -11,9 +12,12 @@ mongoose.connect(process.env.MONGODB_URI);
 //Importing models
 const Location = require("./Models/Location");
 
+//Server setup + middlewares mounting
 const app = express();
+app.use(cors());
 app.use(formidable());
 
+//Getting all locations
 app.get("/", async (req, res) => {
     try {
         const response = await Location.find();
@@ -25,6 +29,7 @@ app.get("/", async (req, res) => {
     }
 });
 
+//Creation new locations
 app.post("/add-location", async (req, res) => {
     try {
         const name = req.fields.name;
